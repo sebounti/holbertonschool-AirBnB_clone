@@ -38,7 +38,6 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-
     def to_dict(self):
         '''
         make a dictionary for the logs

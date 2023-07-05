@@ -8,7 +8,9 @@ import uuid
 
 
 class FileStorage:
-    '''serializes instances to a JSON file and deserializes back to instances'''
+    '''
+    serializes instances to a JSON file and deserializes back to instances
+    '''
     __file_path = "file.json"
     __objects = {}
 
