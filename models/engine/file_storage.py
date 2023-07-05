@@ -3,6 +3,7 @@
 '''Defines the BaseModel class.'''
 from models.base_model import BaseModel
 import json
+import os
 
 
 class FileStorage:
@@ -19,10 +20,9 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        '''
-        adds the object
-        '''
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        """Sets in __objects the obj with key <obj class name>.id."""
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        self.__objects[key] = obj
 
     def save(self):
         '''
@@ -36,14 +36,12 @@ class FileStorage:
 
     def reload(self):
         """
-        reloads the object
+        Deserializes the JSON file to __objects (only if the JSON file exists).
         """
-        try:
-            with open(self.__file_path, 'r', encoding='utf-8') as file:
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, 'r') as file:
                 new_dict = json.load(file)
-                for obj, value in new_dict.items():
-                    class_name, obj_id = obj.split(".")
-                    obj_instance = eval(class_name)(**value)
-                    self.__objects[obj] = obj_instance
-        except FileNotFoundError:
-            pass
+                for key, value in new_dict.items():
+                    class_name, obj_id = key.split(".")
+                    obj = eval(class_name)(**value)
+                    self.__objects[key] = obj
