@@ -6,13 +6,11 @@ import uuid
 
 
 class BaseModel:
-    '''
-    Defines the BaseModel class.
-    '''
+    """
+    BaseModel class
+    """
     def __init__(self, *args, **kwargs):
         """
-           Initialization of the base model
-
         """
         self.id = str(uuid.uuid4())
         self.created_at = self.updated_at = datetime.now()
@@ -25,7 +23,7 @@ class BaseModel:
 
     def __str__(self):
         """
-        Returns
+        return in ISO format
         """
         return "[{}] ({}) {}".\
             format(type(self).__name__, self.id, self.__dict__)
@@ -37,6 +35,7 @@ class BaseModel:
 
     def to_dict(self):
         '''
+        make a dictionary for the logs
         '''
         dictionary = self.__dict__
         dictionary["__class__"] = str(type(self).__name__)
