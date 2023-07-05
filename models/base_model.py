@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 '''Defines the BaseModel class.'''
 
+import models
 from datetime import datetime
 import uuid
 import json
-import models
 
 
 class BaseModel:

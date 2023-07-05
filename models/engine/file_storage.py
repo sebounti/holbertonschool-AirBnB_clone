@@ -3,8 +3,6 @@
 '''Defines the BaseModel class.'''
 from models.base_model import BaseModel
 import json
-import os
-import uuid
 
 
 class FileStorage:
@@ -28,11 +26,11 @@ class FileStorage:
 
     def save(self):
         '''
-        saves the dictionary
+        Serialize __objects to the JSON file __file_path.
         '''
         new_dict = {}
-        for key, value in self.__objects.items():
-            new_dict[key] = value.to_dict()
+        for key in self.__objects:
+            new_dict[key] = self.__objects[key].to_dict()
         with open(self.__file_path, 'w') as file:
             json.dump(new_dict, file)
 
@@ -40,10 +38,12 @@ class FileStorage:
         """
         reloads the object
         """
-        if os.path.exists(self.__file_path):
-            with open(self.__file_path, 'r') as file:
+        try:
+            with open(self.__file_path, 'r', encoding='utf-8') as file:
                 new_dict = json.load(file)
-                for key, value in new_dict.items():
-                    class_name, obj_id = key.split(".")
-                    obj = eval(class_name)(**value)
-                    self.__objects[key] = obj
+                for obj, value in new_dict.items():
+                    class_name, obj_id = obj.split(".")
+                    obj_instance = eval(class_name)(**value)
+                    self.__objects[obj] = obj_instance
+        except FileNotFoundError:
+            pass
