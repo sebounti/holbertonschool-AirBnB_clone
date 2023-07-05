@@ -3,6 +3,8 @@
 
 from datetime import datetime
 import uuid
+import json
+import models
 
 
 class BaseModel:
@@ -29,10 +31,13 @@ class BaseModel:
         return "[{}] ({}) {}".\
             format(type(self).__name__, self.id, self.__dict__)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         """Updates the updated_at attribute
         with the current datetime."""
         self.updated_at = datetime.now()
+        models.storage.new(self)
+        models.storage.save()
+
 
     def to_dict(self):
         '''
