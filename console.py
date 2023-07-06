@@ -8,6 +8,10 @@ import sys
 import json
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+from models import storage
+
+storage = FileStorage()
+storage.reload()
 
 
 class HBNBCommand(cmd.Cmd):
@@ -67,31 +71,27 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id
-
-        Args:
-            arg (str): argument after the command
-        """
         if not arg:
-                print("** class name missing **")
-                return
-            
+            print("** class name missing **")
+            return
+
         args = arg.split()
 
-        if len(args) < 2 or len(args) == 0:
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        
+
         class_name = args[0]
         instance_id = args[1]
-        
+
         try:
-            instance = eval(class_name).get(instance_id)
-            if instance:
-                instance.delete()
-            else:
-                print("** instance id missing **")
-            storage.save()
+            instances = storage.all()
+            for key, instance in instances.items():
+                if instance.__class__.__name__ == class_name and instance.id == instance_id:
+                    del instances[key]
+                    storage.save()
+                    return
+            print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
         
@@ -110,43 +110,49 @@ class HBNBCommand(cmd.Cmd):
         print([str(instance) for instance in instances])
 
     def do_update(self, arg):
-        """ Updates an instance based on the class name and id 
-
-        Args:
-            arg (str): argument after the command
-        """
         if not arg:
             print("** class name missing **")
-        
+            return
+
         args = arg.split()
-        if len(args) < 2 or len(args) == 0:
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        
+
         class_name = args[0]
         instance_id = args[1]
-        
+
         try:
-            instance = eval(class_name).get(instance_id)
-            if instance is None:
-                print("** no instance found **")
-                
-            if len(args) < 3:
-                print("** attribute name missing **")
-                return
-            
-            attribute_name = args[2]
-            
-            if len(args) < 4:
-                print("** value missing **")
-            
-            attribute_value = args[3]
-            
-            setattr(instance, instance, type(getattr(instance, attribute_name))(attribute_value))
-            instance.save()
-            
+            instance_class = eval(class_name)
         except NameError:
             print("** class doesn't exist **")
+            return
+
+        instances = storage.all()
+        instance = None
+        for obj in instances.values():
+            if obj.__class__.__name__ == class_name and obj.id == instance_id:
+                instance = obj
+                break
+
+        if not instance:
+            print("** no instance found **")
+            return
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        attr_name = args[2]
+
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attr_value = args[3]
+
+        setattr(instance, attr_name, type(getattr(instance, attr_name))(attr_value))
+        instance.save()
         
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
