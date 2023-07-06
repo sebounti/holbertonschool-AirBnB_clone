@@ -7,6 +7,7 @@ import cmd
 import sys
 import json
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -34,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
             return
         
         try:
-            class_name = arg.split[0]
+            class_name = arg.split()[0]
             instance = eval(class_name)()
             instance.save()
             print(instance.id)
@@ -42,33 +43,29 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         
     def do_show(self, arg):
-        """show a represantation of an instance based 
-        on is name class and id
-
-        Args:
-            arg (str): argument after the command
-        """
+        """Show a representation of an instance based on its class name and ID"""
         if not arg:
             print("** class name missing **")
             return
-        
+
         args = arg.split()
-        if len(args) < 2 or len(args) == 0:
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        
+
         class_name = args[0]
         instance_id = args[1]
-        
+
         try:
-            instance = eval(class_name).get(instance_id)
-            if instance:
-                print(instance)
-            else:
-                print("** class name missing **")
+            instances = storage.all()
+            for instance in instances.values():
+                if instance.__class__.__name__ == class_name and instance.id == instance_id:
+                    print(instance)
+                    return
+            print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
-    
+
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id
 
@@ -99,21 +96,19 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         
     def do_all(self, arg):
-        """Prints all string representation of all instances based
-
-        Args:
-            arg (str): argument after the command
-        """
+        """Prints string representation of all instances based on the class name"""
         if not arg:
-            instance = storage.all().values()
+            instances = storage.all().values()
         else:
             try:
                 class_name = eval(arg).__name__
-                instance = [instance for instance in storage.all().values() if instance.__class__.__name__ == class_name]
+                instances = [instance for instance in storage.all().values() if instance.__class__.__name__ == class_name]
             except NameError:
                 print("** class doesn't exist **")
-        print([str(instance) for instance in instance])
-        
+                return
+
+        print([str(instance) for instance in instances])
+
     def do_update(self, arg):
         """ Updates an instance based on the class name and id 
 
