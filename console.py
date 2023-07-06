@@ -9,6 +9,13 @@ import json
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models import storage
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
 
 storage = FileStorage()
 storage.reload()
@@ -27,9 +34,9 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         pass
-    
+
     def do_create(self, arg):
-        """Creates a new instance of BaseModel 
+        """Creates a new instance of BaseModel
 
         Args:
             arg (str): _first argument after the command
@@ -37,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        
+
         try:
             class_name = arg.split()[0]
             instance = eval(class_name)()
@@ -45,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
             print(instance.id)
         except NameError:
             print("** class doesn't exist **")
-        
+
     def do_show(self, arg):
         """Show a representation of an instance based on its class name and ID"""
         if not arg:
@@ -94,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         except NameError:
             print("** class doesn't exist **")
-        
+
     def do_all(self, arg):
         """Prints string representation of all instances based on the class name"""
         if not arg:
@@ -153,6 +160,6 @@ class HBNBCommand(cmd.Cmd):
 
         setattr(instance, attr_name, type(getattr(instance, attr_name))(attr_value))
         instance.save()
-        
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
