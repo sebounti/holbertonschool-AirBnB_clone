@@ -5,7 +5,7 @@ FileStorage that serializes and deserializes instances to a JSON file
 import json
 import os.path
 from models.base_model import BaseModel
-
+from models.user import User
 
 class FileStorage:
     """ String representing a simple data structure in JSON format.
