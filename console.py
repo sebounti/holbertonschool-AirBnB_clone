@@ -54,7 +54,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, arg):
-        """Show a representation of an instance based on its class name and ID"""
+        """Show a representation of an instance
+        based on its class name and ID"""
         if not arg:
             print("** class name missing **")
             return
@@ -109,7 +110,8 @@ class HBNBCommand(cmd.Cmd):
         instances = storage.all()
         instance_found = False
         for key, instance in instances.items():
-            if instance.__class__.__name__ == class_name and instance.id == instance_id:
+            if instance.__class__.__name__ == class_name and\
+                  instance.id == instance_id:
                 del instances[key]
                 storage.save()
                 instance_found = True
@@ -118,15 +120,16 @@ class HBNBCommand(cmd.Cmd):
         if not instance_found:
             print("** no instance found **")
 
-
     def do_all(self, arg):
-        """Prints string representation of all instances based on the class name"""
+        """Prints string representation of all
+        instances based on the class name"""
         if not arg:
             instances = storage.all().values()
         else:
             try:
                 class_name = eval(arg).__name__
-                instances = [instance for instance in storage.all().values() if instance.__class__.__name__ == class_name]
+                instances = [instance for instance in storage.all().values()
+                             if instance.__class__.__name__ == class_name]
             except NameError:
                 print("** class doesn't exist **")
                 return
@@ -185,4 +188,3 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-    
