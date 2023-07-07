@@ -1,7 +1,7 @@
 # hbnb - an AirBnB clone :city_sunrise:
 
 <p align="center" width="70%">
-    <img src="https://s3.eu-west-3.amazonaws.com/hbtn.intranet/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MYA5JM5DUTZGMZG%2F20230706%2Feu-west-3%2Fs3%2Faws4_request&X-Amz-Date=20230706T140332Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=e167841d7d00d55ec5e1751430f8855660d4921d89f08f7f08de0cde04400812">
+    <img src="https://github.com/Nimrod02/holbertonschool-AirBnB_clone/blob/main/Hbnb.png">
 </p>
 
 ## Description :speech_balloon:
