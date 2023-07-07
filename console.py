@@ -169,7 +169,7 @@ class HBNBCommand(cmd.Cmd):
 
         attr_name = args[2]
         if not hasattr(instance, attr_name):
-            print("** attribute doesn't exist **")
+            print("** value missing **")
             return
 
         if len(args) < 4:
@@ -178,7 +178,7 @@ class HBNBCommand(cmd.Cmd):
 
         attr_value = args[3]
 
-        setattr(instance, attr_name, attr_value)
+        setattr(instance, attr_name, type(getattr(instance, attr_name))(attr_value))
         instance.save()
 
 if __name__ == '__main__':
