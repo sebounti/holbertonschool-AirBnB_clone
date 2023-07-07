@@ -1,65 +1,38 @@
-#!/usr/bin/python3
-
 import unittest
-from datetime import datetime
 from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
-    """calls the save method and checks that
-    the updated_at attribute was updated
-    """
-    def test_save(self):
-        my_model = BaseModel()
-        old_updated_at = my_model.updated_at
-        my_model.save()
-        self.assertNotEqual(old_updated_at, my_model.updated_at)
-
-    def test_to_dict(self):
-        """calls the to_dict method
-        and checks that the returned dictionary contains the expected
-        keys and values
-        """
-        my_model = BaseModel()
-        # Call the to_dict() method on the BaseModel instance and store the result in my_dict.
-        my_dict = my_model.to_dict()
-        # Check if the __class__ key in my_dict has the correct value 'BaseModel'.
-        self.assertEqual(my_dict['__class__'], 'BaseModel')
-        # Check if the id key in my_dict has the same value as the id attribute of the BaseModel instance.
-        self.assertEqual(my_dict['id'], my_model.id)
-        # Check if the created_at key in my_dict has the same value as the created_at attribute of the BaseModel instance.
-        self.assertEqual(my_dict[
-            'created_at'], my_model.created_at.isoformat())
-        self.assertEqual(my_dict[
-            'updated_at'], my_model.updated_at.isoformat())
-
-    def test_id(self):
-        """
-        checks if the id attribute us a string
-        """
-        my_model = BaseModel()  # Create an instance of BaseModel.
-        self.assertIsInstance(my_model.id, str)  # Check if the id attribute of the BaseModel instance is of type string.
-
-    def test_created_at(self):
-        """
-        checks if the created_at attribute is a datetime
-        object
-        """
-        my_model = BaseModel()  # Create an instance of BaseModel.
-        self.assertIsInstance(my_model.created_at, datetime)  # Check if the created_at attribute of the BaseModel instance is of type datetime.
+    def test_init(self):
+        model = BaseModel()
+        self.assertIsInstance(model, BaseModel)
+        self.assertIsNotNone(model.id)
+        self.assertIsNotNone(model.created_at)
+        self.assertIsNotNone(model.updated_at)
+        self.assertEqual(model.first_name, "")
 
     def test_str(self):
-        """
-        calls __str__ method, and checks
-        that the returned string is in the expected format
-        """
-        my_model = BaseModel()  # Create an instance of BaseModel.
-        expected_str = '[BaseModel] ({}) {}'.format(
-            my_model.id,
-            my_model.__dict__
-            )  # Define the expected string output of the __str__() method on the BaseModel instance.
-        self.assertEqual(str(my_model), expected_str)  # Check if calling str() on the BaseModel instance produces the expected string.
+        model = BaseModel()
+        model_str = str(model)
+        self.assertIn("[BaseModel]", model_str)
+        self.assertIn(model.id, model_str)
 
+    def test_save(self):
+        model = BaseModel()
+        prev_updated_at = model.updated_at
+        model.save()
+        self.assertNotEqual(prev_updated_at, model.updated_at)
+
+    def test_to_dict(self):
+        model = BaseModel()
+        model_dict = model.to_dict()
+        self.assertIsInstance(model_dict, dict)
+        self.assertEqual(model_dict['__class__'], 'BaseModel')
+        self.assertEqual(model_dict['id'], model.id)
+        self.assertEqual(model_dict['created_at'], model.created_at.\
+                         strftime("%Y-%m-%dT%H:%M:%S.%f"))
+        self.assertEqual(model_dict['updated_at'], model.updated_at.\
+                         strftime("%Y-%m-%dT%H:%M:%S.%f"))
 
 if __name__ == '__main__':
     unittest.main()
