@@ -1,4 +1,3 @@
-# hbnb - an AirBnB clone :city_sunrise:
 
 <p align="center" width="70%">
     <img src="https://github.com/Nimrod02/holbertonschool-AirBnB_clone/blob/main/Hbnb.png">
