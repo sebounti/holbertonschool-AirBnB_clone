@@ -52,6 +52,8 @@ class BaseModel:
         """
         dictemp = dict(self.__dict__)
         dictemp['__class__'] = self.__class__.__name__
-        dictemp['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dictemp['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        dictemp['updated_at'] = self.updated_at.\
+            strftime("%Y-%m-%dT%H:%M:%S.%f")
+        dictemp['created_at'] = self.created_at.\
+            strftime("%Y-%m-%dT%H:%M:%S.%f")
         return dictemp

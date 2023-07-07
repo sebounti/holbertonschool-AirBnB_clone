@@ -13,6 +13,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """ String representing a simple data structure in JSON format.
         ex: '{ "12": { "numbers": [1, 2, 3], "name": "John" } }'
