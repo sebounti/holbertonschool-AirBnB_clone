@@ -68,14 +68,23 @@ class HBNBCommand(cmd.Cmd):
         instance_id = args[1]
 
         try:
-            instances = storage.all()
-            for instance in instances.values():
-                if instance.__class__.__name__ == class_name and instance.id == instance_id:
-                    print(instance)
-                    return
-            print("** no instance found **")
+            instance_class = eval(class_name)
         except NameError:
             print("** class doesn't exist **")
+            return
+
+        instances = storage.all()
+        instance = None
+        for obj in instances.values():
+            if obj.__class__.__name__ == class_name and obj.id == instance_id:
+                instance = obj
+                break
+
+        if not instance:
+            print("** no instance found **")
+            return
+
+        print(instance)
 
     def do_destroy(self, arg):
         if not arg:
@@ -98,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
                     del instances[key]
                     storage.save()
                     return
-            print("** no instance found **")
+            print("** class doesn't exist **")
         except NameError:
             print("** class doesn't exist **")
 
@@ -151,6 +160,9 @@ class HBNBCommand(cmd.Cmd):
             return
 
         attr_name = args[2]
+        if not hasattr(instance, attr_name):
+            print("** attribute doesn't exist **")
+            return
 
         if len(args) < 4:
             print("** value missing **")
