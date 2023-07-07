@@ -150,15 +150,15 @@ class HBNBCommand(cmd.Cmd):
         instance_id = args[1]
 
         try:
-            instance_class = eval(class_name)
-        except NameError:
+            instance_class = globals()[class_name]
+        except KeyError:
             print("** class doesn't exist **")
             return
 
         instances = storage.all()
         instance = None
         for obj in instances.values():
-            if obj.__class__.__name__ == class_name and obj.id == instance_id:
+            if isinstance(obj, instance_class) and obj.id == instance_id:
                 instance = obj
                 break
 
@@ -176,10 +176,17 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
 
-        attr_value = args[3]
+        attr_value = ' '.join(args[3:])
 
-        if attr_name not in instance.__dict__:
+        if not hasattr(instance, attr_name):
             print("** attribute doesn't exist **")
+            return
+
+        attr_type = type(getattr(instance, attr_name))
+        try:
+            attr_value = attr_type(attr_value)
+        except ValueError:
+            print("** invalid value for attribute **")
             return
 
         setattr(instance, attr_name, attr_value)
