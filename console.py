@@ -179,7 +179,7 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute doesn't exist **")
             return
 
-        setattr(instance, attr_name, type(getattr(instance, attr_name))(attr_value))
+        setattr(instance, attr_name, attr_value)
         instance.save()
 
 
