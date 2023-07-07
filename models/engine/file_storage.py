@@ -7,6 +7,7 @@ import os.path
 from models.base_model import BaseModel
 from models.user import User
 
+
 class FileStorage:
     """ String representing a simple data structure in JSON format.
         ex: '{ "12": { "numbers": [1, 2, 3], "name": "John" } }'
