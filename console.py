@@ -101,15 +101,23 @@ class HBNBCommand(cmd.Cmd):
         instance_id = args[1]
 
         try:
-            instances = storage.all()
-            for key, instance in instances.items():
-                if instance.__class__.__name__ == class_name and instance.id == instance_id:
-                    del instances[key]
-                    storage.save()
-                    return
-            print("** class doesn't exist **")
+            instance_class = eval(class_name)
         except NameError:
             print("** class doesn't exist **")
+            return
+
+        instances = storage.all()
+        instance_found = False
+        for key, instance in instances.items():
+            if instance.__class__.__name__ == class_name and instance.id == instance_id:
+                del instances[key]
+                storage.save()
+                instance_found = True
+                break
+
+        if not instance_found:
+            print("** no instance found **")
+
 
     def do_all(self, arg):
         """Prints string representation of all instances based on the class name"""
@@ -170,7 +178,7 @@ class HBNBCommand(cmd.Cmd):
 
         attr_value = args[3]
 
-        setattr(instance, attr_name, type(getattr(instance, attr_name))(attr_value))
+        setattr(instance, attr_name, attr_value)
         instance.save()
 
 if __name__ == '__main__':
