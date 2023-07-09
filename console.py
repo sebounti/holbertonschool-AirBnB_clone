@@ -137,30 +137,60 @@ class HBNBCommand(cmd.Cmd):
         print([str(instance) for instance in instances])
 
     def do_update(self, arg):
-        """Updates an instance based on the class name and id"""
         if not arg:
             print("** class name missing **")
             return
-        arg_list = arg.split()
-        if arg_list[0] not in self.classes:
-            print("** class doesn't exist **")
-            return
-        if len(arg_list) < 2:
+
+        args = arg.split()
+        if len(args) < 2:
             print("** instance id missing **")
             return
-        key = arg_list[0] + "." + arg_list[1]
-        if key not in self.storage.all():
+
+        class_name = args[0]
+        instance_id = args[1]
+
+        try:
+            instance_class = globals()[class_name]
+        except KeyError:
+            print("** class doesn't exist **")
+            return
+
+        instances = storage.all()
+        instance = None
+        for obj in instances.values():
+            if isinstance(obj, instance_class) and obj.id == instance_id:
+                instance = obj
+                break
+
+        if not instance:
             print("** no instance found **")
             return
-        if len(arg_list) < 3:
+
+        if len(args) < 3:
             print("** attribute name missing **")
             return
-        if len(arg_list) < 4:
+
+        attr_name = args[2]
+
+        if len(args) < 4:
             print("** value missing **")
             return
-        obj = self.storage.all()[key]
-        setattr(obj, arg_list[2], arg_list[3])
-        obj.save()
+
+        attr_value = ' '.join(args[3:])
+
+        if not hasattr(instance, attr_name):
+            print("** attribute doesn't exist **")
+            return
+
+        attr_type = type(getattr(instance, attr_name))
+        try:
+            attr_value = attr_type(attr_value)
+        except ValueError:
+            print("** invalid value for attribute **")
+            return
+
+        setattr(instance, attr_name, attr_value)
+        instance.save()
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
