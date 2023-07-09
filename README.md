@@ -60,5 +60,5 @@ $
  ```
 
  ## Authors :pencil2:
-- Arthur letrun [[Nimrod02][(https://github.com/Nimrod02)]
+- Arthur Letrun [[Nimrod02][(https://github.com/Nimrod02)]
 - Sebastien Lenne [[sebounti][(https://github.com/sebounti)]
