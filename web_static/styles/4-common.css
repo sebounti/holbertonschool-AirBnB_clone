@@ -1,0 +1,18 @@
+/* global style */
+
+body {
+  color: #484848;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* container style */
+.container {
+  margin: 30px auto;
+  max-width: 1000px;
+}
+
+/* section style */
+.strong {
+font-weight: bold;
+}
